@@ -75,10 +75,15 @@ Node:
 Topic - Type of message
 
 ***doris/asr*** - std_msgs/Command_basic.msg
+
 string action
+
 string[] object
+
 string location
+
 string[] object_action
+
 string[] object_adj
 
 This package continuosly reads from the app trought usb, decoding the inputs to a proper command. Then it publishes it on the /doris/asr topic
