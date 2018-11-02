@@ -52,6 +52,9 @@ object_action = ["lying", "standing", "dining", "wearing", "waiting", "sitting",
 object_adj = ["white", "blue", "red", \
                 "biggest", "smallest", "bigger"]
 
+object_action = [locate, quantify, identify, identify_category, identify_same_category, identify_color]
+
+
 ####arena basic######
 ## Where is the <object> located - Where is the microwave located
 # -> Action::locate Object::microwave Location::- Object_action::- Object_adj::-
@@ -76,7 +79,7 @@ object_adj = ["white", "blue", "red", \
 ## Which is the <object_adj> <object>? - Which is the lightest drinks?
 # -> Action::identify Object::drinks Location::- Object_action::- Object_adj::lighest
 ## What's the color of the <object>? - What's the color of the beer?
-# -> Action::identify Object::beer Location::- Object_action::- Object_adj::-
+# -> Action::identify_color Object::beer Location::- Object_action::- Object_adj::-
 
 #######crowd basic########
 ## Tell me how many <object> are <object_action> <objecy_adj> - Tell me how many people are wearing white
