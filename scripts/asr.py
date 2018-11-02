@@ -23,7 +23,8 @@ sock.connect(server_address)
 
 rooms = ["bathroom", "bedroom", "closet", "dining", "garage", \
         "hall", "kitchen", "laundry", "living", "office", \
-        "staircase", "corridor", "counter", "crowd"
+        "staircase", "corridor", "counter", "crowd", "ground", \
+        "there"
         ]
 
 objects = ["shampoo", "soap", "cloth", "sponge", "toothpaste",  
@@ -38,15 +39,18 @@ objects = ["shampoo", "soap", "cloth", "sponge", "toothpaste",
             "bed", "night table", "wardrobe", "dresser", "armchair", "drawer", "desk", \
             "sideboard", "cutlery drawer", "dining table", "chair", "baby chair", \
             "bookshelf", "sofa", "coffee table", "center table", "bar", "fireplace", "tv couch", \
-            "microwave", "cupboard", "counter", "cabinet", "sink", "stove", "fridge", "freezer", "washing machine", "dishwasher", \
+            "microwave", "cupboard", "counter", "sink", "stove", "fridge", "freezer", "washing machine", "dishwasher", \
             "cabinet", \
             "bidet", "shower", "bathtub", "toilet", "towel rail", "bathroom cabinet", "washbasin", \
-            "females", "female", "male", "males", "woman", "man", "women", "men"
+            "object", "objects" \
+            "females", "female", "male", "males", "woman", "man", "women", "men", "children", "people", "elders", \
+            "sheets"
             ]
 
-object_action = ["lying", "standing", "dining", "wearing"]
+object_action = ["lying", "standing", "dining", "wearing", "waiting", "sitting", "stored", "store"]
 
-object_adj = ["white", "blue", "red"]
+object_adj = ["white", "blue", "red", \
+                "biggest", "smallest", "bigger"]
 
 ####arena basic######
 ## Where is the <object> located - Where is the microwave located
@@ -72,7 +76,6 @@ object_adj = ["white", "blue", "red"]
 
 ## How many <object> in the <location> are <object_action>? - How many people in the crowd are waving?
 # -> Action::quantify Object::people Location::crowd Object_action::weaving Object_adj::-
-
 # How many people in the crowd are standing or lying down?
 # How many people in the crowd are raising their left arm?
 # How many people in the crowd are raising their right arm?
@@ -95,6 +98,10 @@ object_adj = ["white", "blue", "red"]
 ## What's the color of the <object>? - What's the color of the beer?
 # -> Action::identify Object::beer Location::- Object_action::- Object_adj::-
 
+
+# Doors == dollars
+
+
 def find_object(words):
     temp = []
     flag = False
@@ -109,16 +116,22 @@ def find_room(words):
     for object in rooms:
         if object in words:            
             return object, True
+    
+    return "", False
 
 def find_object_action(words):
     for object in object_action:
         if object in words:            
             return object, True
+    
+    return "", False
 
 def find_object_adj(words):
     for object in object_adj:
-        if object in words:            
+        if object in words:          
             return object, True
+
+    return "", False
 
 
 def treat_message(message):
@@ -128,13 +141,15 @@ def treat_message(message):
 
     command = Command_basic()
 
-    tagged = nltk.pos_tag(words)
-    print("\nMsg_tagged: ",tagged)
+    #tagged = nltk.pos_tag(words)
+    #print("\nMsg_tagged: ",tagged)
 
     object_found = False
     location_found = False
     object_action_found = False
     object_adj_found = False
+
+    print(words)
 
     # Where is the <object> located - Where is the microwave located
     # -> Action::locate Object::microwave Location::- Object_action::- Object_adj::-
@@ -164,19 +179,18 @@ def treat_message(message):
                 if location_found == False:
                     print("I did not understand where you want me to quantify")
             
-            
             # How many <object> in the <location> are <object_action>? - How many people in the crowd are waving?
             # -> Action::quantify Object::people Location::crowd Object_action::weaving Object_adj::-
             command.object_adj, object_adj_found = find_object_adj(words)
             if object_adj_found == True:
                 command.object, object_found = find_object(words)
-                command.location, location_found = find_location(words)
+                command.location, location_found = find_room(words)
                 if object_found == False and location_found == True:
                     print("I did not understand what "+command.object_adj+" in the "+command.location+" you want me to quantify")
                 elif object_found == True and location_found == False:
-                    print("I did not understand the location of "+command.object+command.object_adj+" you want me to quantify")
+                    print("I did not understand the location of "+command.object[0]+command.object_adj+" you want me to quantify")
                 elif object_found == True and location_found == True:
-                    print("You want to quantify the "+command.object+command.object_adj+" in the "+command.location)
+                    print("You want to quantify the "+command.object[0]+command.object_adj+" in the "+command.location)
                 else:
                     print("I did not understand where you want me to quantify "+command.object_adj)
 
@@ -188,7 +202,7 @@ def treat_message(message):
             # -> Action::quantify Object::snacks Location::there Object_action::- Object_adj::-
             else:                
                 command.object, object_found = find_object(words)
-                command.location, location_found = find_location(words)
+                command.location, location_found = find_room(words)
                 if object_found == False and location_found == False:
                     print("I did not understand which object you want me to quantify")
                 elif location_found == False and object_found == True:
@@ -198,7 +212,7 @@ def treat_message(message):
                 else:
                     print("I did not understand what you want me to quantify")
     
-    elif "which" in words:
+    elif "which" in words and "between" not in words:
         # In which room is the <object> - In which room is the microwave
         # -> Action::locate Object::microwave Location::- Object_action::- Object_adj::-
         # In which room is the <object> - In which room is the counter
@@ -220,9 +234,9 @@ def treat_message(message):
             if object_found == False and object_adj_found == True:
                 print("I did not understand what object you want me to say that is the "+command.object_adj)
             elif object_found == True and object_adj_found == False:
-                print("I did not understand what what you want me to say about "+command.object)
+                print("I did not understand what what you want me to say about "+command.object[0])
             elif object_found == True and object_adj_found == True:
-                print("You want me to say the "+command.object_adj+command.object)
+                print("You want me to say the "+command.object_adj+command.object[0])
             else:
                 print("I did not understand what you want me to identify")
 
@@ -249,7 +263,7 @@ def treat_message(message):
     elif "number" in words:
         command.action = "quantify" 
         command.object, object_found = find_object(words)
-        command.location, location_found = find_location(words)
+        command.location, location_found = find_room(words)
         if object_found == False and location_found == False:
             print("I did not understand which object you want me to quantify")
         elif location_found == False and object_found == True:
@@ -263,7 +277,7 @@ def treat_message(message):
     # -> Action::identify Object::person Location::- Object_action::sitting Object_adj::-
     # Tell me if the person <object_action> <object> or <object>? - Tell me if the person waving was a man?
     # -> Action::identify Object::person Location::- Object_action::weaving Object_adj::-
-    elif ("was" in words or "tell" in words) and "person" in words:
+    elif ("was" in words or "what's" in words or "what" in words or "tell" in words) and "person" in words:
         command.action = "identify"
         command.object, object_found = find_object(words)
         command.object_action, object_action_found = find_object_action(words)
@@ -275,28 +289,13 @@ def treat_message(message):
             print("You want me to identify if "+command.object[0]+" or "+command.object[1]+" was "+command.object_action)
         else:
             print("I did not understand what you want me to identify")
-       
-    # What objects are <objects_action> in the <location>? - What objects are stored in the drawer?
-    # -> Action::identify Object::- Location::drawer Object_action::stored Object_adj::-
-    elif "what" in words and ("object" in words or "objects" in words):
-        command.action = "identify"
-        command.object_action, object_action_found = find_object_action(words)
-        command.location, location_found = find_location(words)
-        if location_found == False and object_action_found == False: 
-            print("You want me to identify what objects"+command.object_action+"are in the "+command.location)
-        elif location_found == True and object_action_found == False: 
-            print("I did not understand what you want me to identify in the"+command.location)
-        elif location_found == False and object_action_found == True: 
-            print("I did not understand what you want me to identify "+command.object_action)
-        else:
-            print("I did not understand what you want me to identify")
 
     # What is the category of the <object>? - What is the category of the pear?
     # -> Action::identify_category Object::pear, pringles Location::- Object_action::- Object_adj::-
     # Do the <object> and <object> belong to the same category? - Do the apple and tea spoon belong to the same category?
     # -> Action::identify_same_category Object::apple, tea spoon Location::- Object_action::- Object_adj::-
     elif "category" in words:
-        if "belong" in words:
+        if "belong" not in words:
             command.action = "identify_category"
             command.object, object_found = find_object(words)
             if object_found == True:
@@ -321,8 +320,25 @@ def treat_message(message):
         if object_found == False:
             print("I did not understood each object you want me to say the color")
         else:
-            print("You want to know th color of the "+command.object)
+            print("You want to know th color of the "+command.object[0])
 
+
+    # What objects are <objects_action> in the <location>? - What objects are stored in the drawer?
+    # -> Action::identify Object::- Location::drawer Object_action::stored Object_adj::-
+    elif "what" in words and ("object" in words or "objects" in words):
+        command.action = "identify"
+        command.object_action, object_action_found = find_object_action(words)
+        command.location, location_found = find_room(words)
+        if location_found == False and object_action_found == False: 
+            print("You want me to identify what objects"+command.object_action+"are in the "+command.location)
+        elif location_found == True and object_action_found == False: 
+            print("I did not understand what you want me to identify in the"+command.location)
+        elif location_found == False and object_action_found == True: 
+            print("I did not understand what you want me to identify "+command.object_action)
+        else:
+            print("I did not understand what you want me to identify")
+
+    
 
 
     print(command.action, command.object, command.location, command.object_action, command.object_adj) 
