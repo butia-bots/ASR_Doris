@@ -120,18 +120,24 @@ def find_room(words):
     return "", False
 
 def find_object_action(words):
+    temp = []
+    flag = False
     for object in object_action:
         if object in words:            
-            return object, True
-    
-    return "", False
+            temp.append(object)
+            flag = True
+            
+    return temp, flag
 
 def find_object_adj(words):
+    temp = []
+    flag = False
     for object in object_adj:
-        if object in words:          
-            return object, True
-
-    return "", False
+        if object in words:            
+            temp.append(object)
+            flag = True
+            
+    return temp, flag
 
 
 def treat_message(message):
@@ -186,13 +192,13 @@ def treat_message(message):
                 command.object, object_found = find_object(words)
                 command.location, location_found = find_room(words)
                 if object_found == False and location_found == True:
-                    print("I did not understand what "+command.object_adj+" in the "+command.location+" you want me to quantify")
+                    print("I did not understand what "+command.object_adj[0]+" in the "+command.location+" you want me to quantify")
                 elif object_found == True and location_found == False:
-                    print("I did not understand the location of "+command.object[0]+command.object_adj+" you want me to quantify")
+                    print("I did not understand the location of "+command.object[0]+command.object_adj[0]+" you want me to quantify")
                 elif object_found == True and location_found == True:
-                    print("You want to quantify the "+command.object[0]+command.object_adj+" in the "+command.location)
+                    print("You want to quantify the "+command.object[0]+command.object_adj[0]+" in the "+command.location)
                 else:
-                    print("I did not understand where you want me to quantify "+command.object_adj)
+                    print("I did not understand where you want me to quantify "+command.object_adj[0])
 
             # How many <object> are in the <location> - How many doors are in the bathroom
             # -> Action::quantify Object::doors Location::bathroom Object_action::- Object_adj::-
@@ -232,7 +238,7 @@ def treat_message(message):
             command.object, object_found = find_object(words)
             command.object_adj, object_adj_found = find_object_adj(words)
             if object_found == False and object_adj_found == True:
-                print("I did not understand what object you want me to say that is the "+command.object_adj)
+                print("I did not understand what object you want me to say that is the "+command.object_adj[0])
             elif object_found == True and object_adj_found == False:
                 print("I did not understand what what you want me to say about "+command.object[0])
             elif object_found == True and object_adj_found == True:
@@ -252,9 +258,9 @@ def treat_message(message):
         elif object_found == True and object_adj_found == False and len(command.object) == 2:
             print("I did not understand what you what me to say about "+command.object[0]+" and "+command.object[1])
         elif object_found == True and object_adj_found == True and len(command.object) == 1:
-            print("I did not understand which object plus"+command.object[0]+" you want me to say what is "+command.object_adj)
+            print("I did not understand which object plus"+command.object[0]+" you want me to say what is "+command.object_adj[0])
         elif object_found == True and object_adj_found == True and len(command.object) == 2:
-            print("You want me to say if "+command.object[0]+" or "+command.object[1]+" is "+command.object_adj)
+            print("You want me to say if "+command.object[0]+" or "+command.object[1]+" is "+command.object_adj[0])
         else:
             print("I did not understand which object you want me to choose between")
 
@@ -282,11 +288,11 @@ def treat_message(message):
         command.object, object_found = find_object(words)
         command.object_action, object_action_found = find_object_action(words)
         if object_found == False and object_action_found == True:
-            print("I did not understand who you want me to identify "+command.object_action)
+            print("I did not understand who you want me to identify "+command.object_action[0])
         elif object_found == True and (len(command.object) == 1) and object_action_found == True:
-            print("You want me to identify if "+command.object[0]+" was "+command.object_action)
+            print("You want me to identify if "+command.object[0]+" was "+command.object_action[0])
         elif object_found == True and (len(command.object) == 2) and object_action_found == True:
-            print("You want me to identify if "+command.object[0]+" or "+command.object[1]+" was "+command.object_action)
+            print("You want me to identify if "+command.object[0]+" or "+command.object[1]+" was "+command.object_action[0])
         else:
             print("I did not understand what you want me to identify")
 
@@ -330,11 +336,11 @@ def treat_message(message):
         command.object_action, object_action_found = find_object_action(words)
         command.location, location_found = find_room(words)
         if location_found == False and object_action_found == False: 
-            print("You want me to identify what objects"+command.object_action+"are in the "+command.location)
+            print("You want me to identify what objects"+command.object_action[0]+"are in the "+command.location)
         elif location_found == True and object_action_found == False: 
             print("I did not understand what you want me to identify in the"+command.location)
         elif location_found == False and object_action_found == True: 
-            print("I did not understand what you want me to identify "+command.object_action)
+            print("I did not understand what you want me to identify "+command.object_action[0])
         else:
             print("I did not understand what you want me to identify")
 
