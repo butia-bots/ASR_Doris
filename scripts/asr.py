@@ -47,13 +47,10 @@ objects = ["shampoo", "soap", "cloth", "sponge", "toothpaste",
             "sheets"
             ]
 
-object_action = ["lying", "standing", "dining", "wearing", "waiting", "sitting", "stored", "store"]
+object_action = ["lying", "standing", "dining", "wearing", "waiting", "sitting", "stored", "store", "pointing", "raising"]
 
 object_adj = ["white", "blue", "red", \
-                "biggest", "smallest", "bigger"]
-
-object_action = [locate, quantify, identify, identify_category, identify_same_category, identify_color]
-
+                "biggest", "smallest", "bigger", "left", "right", "arm", "leg"]
 
 ####arena basic######
 ## Where is the <object> located - Where is the microwave located
@@ -101,11 +98,7 @@ object_action = [locate, quantify, identify, identify_category, identify_same_ca
 # How many people in the crowd are raising their left arm?
 # How many people in the crowd are raising their right arm?
 
-
-
-
 # Doors == dollars
-
 
 def find_object(words):
     temp = []
@@ -185,25 +178,58 @@ def treat_message(message):
                 command.object_adj, object_adj_found = find_object_adj(words)
 
                 #melhorar issoo
-                if object_found == False:
-                    print("I did not understand which object you want me to quantify")
-                if location_found == False:
-                    print("I did not understand where you want me to quantify")
-            
+                
+                if object_found == True and location_found == False and object_adj_found == True and object_action_found == False:
+                    print("I did not understand the location and the action of the "+command.object[0]+" you want me to quantify with "+command.object_adj[0])
+                elif object_found == True and location_found == False and object_adj_found == False and object_action_found == False:
+                    print("I did not understand the location, the action and its feature of the "+command.object[0]+" you want me to quantify ")
+                elif object_found == True and location_found == True and object_adj_found == False and object_action_found == False:
+                    print("I did not understand the feature adn the action of the "+command.object[0]+" in the "+command.location+" you want me to quantify")
+                elif object_found == False and location_found == True and object_adj_found == False and object_action_found == False:
+                    print("I did not understand which object in the "+command.location+" you want me to quantify")
+                elif object_found == False and location_found == True and object_adj_found == True and object_action_found == False:
+                    print("I did not understand which object in the "+command.location+" with "+command.object_adj[0]+" you want me to quantify")
+                elif object_found == False and location_found == False and object_adj_found == True and object_action_found == False:
+                    print("I did not understand which object and the location with "+command.object_adj[0]+" that you want me to quantify")  
+                elif object_found == True and location_found == True and object_adj_found == True and object_action_found == False:
+                    print("I did not understand the object action of the object in the "+command.location+" with "+command.object_adj[0]+" you want me to quantify") 
+
+                elif object_found == True and location_found == False and object_adj_found == True and object_action_found == True:
+                    print("I did not understand the location of the "+command.object[0]+command.object_adj[0]+command.object_adj[0]+" you want me to quantify")
+                elif object_found == True and location_found == False and object_adj_found == False and object_action_found == True:
+                    print("I did not understand the location and the feature of the "+command.object_action[0]+command.object[0]+" you want me to quantify ")
+                elif object_found == True and location_found == True and object_adj_found == False and object_action_found == True:
+                    print("I did not understand the feature of the "+command.object_action[0]+command.object[0]+" in the "+command.location+" you want me to quantify")
+                elif object_found == False and location_found == True and object_adj_found == False and object_action_found == True:
+                    print("I did not understand which object "+command.object_action[0]+" in the "+command.location+" you want me to quantify")
+                elif object_found == False and location_found == True and object_adj_found == True and object_action_found == True:
+                    print("I did not understand which object in the "+command.location+" are "+command.object_action[0]+command.object_adj[0]+" you want me to quantify")
+                elif object_found == False and location_found == False and object_adj_found == True and object_action_found == True:
+                    print("I did not understand which object and the location for "+command.object_action[0]+command.object_adj[0]+" that you want me to quantify")  
+                elif object_found == True and location_found == True and object_adj_found == True and object_action_found == True:
+                    print(" You want me to quantify "+command.object[0]+" in the "+command.location+command.object_action[0]+command.object_adj[0])         
+
             # How many <object> in the <location> are <object_action>? - How many people in the crowd are waving?
             # -> Action::quantify Object::people Location::crowd Object_action::weaving Object_adj::-
-            command.object_adj, object_adj_found = find_object_adj(words)
-            if object_adj_found == True:
-                command.object, object_found = find_object(words)
-                command.location, location_found = find_room(words)
-                if object_found == False and location_found == True:
-                    print("I did not understand what "+command.object_adj[0]+" in the "+command.location+" you want me to quantify")
-                elif object_found == True and location_found == False:
-                    print("I did not understand the location of "+command.object[0]+command.object_adj[0]+" you want me to quantify")
-                elif object_found == True and location_found == True:
-                    print("You want to quantify the "+command.object[0]+command.object_adj[0]+" in the "+command.location)
+            # How many people in the crowd are standing or lying down?
+            # How many people in the crowd are raising their left arm?
+            # How many people in the crowd are raising their right arm?
+            command.object_action, object_action_found = find_object_action(words)
+            if object_action_found == True:
+                #command.object, object_found = find_object(words)
+                command.object = ["people"]
+                #command.location, location_found = find_room(words)
+                command.location = "crowd"
+                command.object_adj, object_adj_found = find_object_adj(words)
+            
+                if len(command.object_action) == 1 and command.object_adj_found == False:
+                    print("You want me to quantify the people in the crowd "+command.action[0])
+                elif len(command.object_action) == 1 and command.object_adj_found == True:
+                    print("You want me to quantify the people in the crowd "+command.action[0]+" to the "+command.object_adj[0])
+                elif len(command.object_action) == 2:
+                    print("You want me to quantify the people in the crowd "+command.action[0]+" or "+command.action[1])
                 else:
-                    print("I did not understand where you want me to quantify "+command.object_adj[0])
+                    print("I did not understand what you want me to quantify about the people in the crowd")
 
             # How many <object> are in the <location> - How many doors are in the bathroom
             # -> Action::quantify Object::doors Location::bathroom Object_action::- Object_adj::-
@@ -214,8 +240,8 @@ def treat_message(message):
             else:                
                 command.object, object_found = find_object(words)
                 command.location, location_found = find_room(words)
-                if object_found == False and location_found == False:
-                    print("I did not understand which object you want me to quantify")
+                if object_found == True and location_found == True:
+                    print("You want me to quantify the "command.object[0]+" in the "+command.location)
                 elif location_found == False and object_found == True:
                     print("I did not understand where you want me to quantify the "+command.object[0])
                 elif location_found == True and object_found == False:
@@ -349,7 +375,9 @@ def treat_message(message):
         else:
             print("I did not understand what you want me to identify")
 
-    
+    elif len(words) > 1:
+        print("I did not understand what you said")
+
 
 
     print(command.action, command.object, command.location, command.object_action, command.object_adj) 
