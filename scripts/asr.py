@@ -60,6 +60,24 @@ object_adj = ["white", "blue", "red", \
 ## In which room is the <object> - In which room is the microwave
 # -> Action::locate Object::microwave Location::- Object_action::- Object_adj::-
 
+########object basic########
+## Where can I find the <object>? - Where can I find the muesli?
+# -> Action::locate Object::muesli Location::- Object_action::- Object_adj::-
+## What objects are <objects_action> in the <location>? - What objects are stored in the drawer?
+# -> Action::identify Object::- Location::drawer Object_action::stored Object_adj::-
+## Between the <object> and <object>, which one is <object_adj>? - Between the chips and pringles, which one is bigger?
+# -> Action::identify Object::chips, pringles Location::- Object_action::- Object_adj::bigger
+## What is the category of the <object>? - What is the category of the pear?
+# -> Action::identify_category Object::pear, pringles Location::- Object_action::- Object_adj::-
+## Do the <object> and <object> belong to the same category? - Do the apple and tea spoon belong to the same category?
+# -> Action::identify_same_category Object::apple, tea spoon Location::- Object_action::- Object_adj::-
+## How many <objects> are <location>? - How many snacks are there?
+# -> Action::quantify Object::snacks Location::there Object_action::- Object_adj::-
+## Which is the <object_adj> <object>? - Which is the lightest drinks?
+# -> Action::identify Object::drinks Location::- Object_action::- Object_adj::lighest
+## What's the color of the <object>? - What's the color of the beer?
+# -> Action::identify Object::beer Location::- Object_action::- Object_adj::-
+
 #######crowd basic########
 ## Tell me how many <object> are <object_action> <objecy_adj> - Tell me how many people are wearing white
 # -> Action::quantify Object::people Location::- Object_action::wearing Object_adj::white
@@ -80,23 +98,7 @@ object_adj = ["white", "blue", "red", \
 # How many people in the crowd are raising their left arm?
 # How many people in the crowd are raising their right arm?
 
-########object basic########
-## Where can I find the <object>? - Where can I find the muesli?
-# -> Action::locate Object::muesli Location::- Object_action::- Object_adj::-
-## What objects are <objects_action> in the <location>? - What objects are stored in the drawer?
-# -> Action::identify Object::- Location::drawer Object_action::stored Object_adj::-
-## Between the <object> and <object>, which one is <object_adj>? - Between the chips and pringles, which one is bigger?
-# -> Action::identify Object::chips, pringles Location::- Object_action::- Object_adj::bigger
-## What is the category of the <object>? - What is the category of the pear?
-# -> Action::identify_category Object::pear, pringles Location::- Object_action::- Object_adj::-
-## Do the <object> and <object> belong to the same category? - Do the apple and tea spoon belong to the same category?
-# -> Action::identify_same_category Object::apple, tea spoon Location::- Object_action::- Object_adj::-
-## How many <objects> are <location>? - How many snacks are there?
-# -> Action::quantify Object::snacks Location::there Object_action::- Object_adj::-
-## Which is the <object_adj> <object>? - Which is the lightest drinks?
-# -> Action::identify Object::drinks Location::- Object_action::- Object_adj::lighest
-## What's the color of the <object>? - What's the color of the beer?
-# -> Action::identify Object::beer Location::- Object_action::- Object_adj::-
+
 
 
 # Doors == dollars
