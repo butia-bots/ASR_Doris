@@ -243,7 +243,7 @@ def treat_message(message):
                 command.object, object_found = find_object(words)
                 command.location, location_found = find_room(words)
                 if object_found == True and location_found == True:
-                    print("You want me to quantify the "command.object[0]+" in the "+command.location)
+                    print("You want me to quantify the "+command.object[0]+" in the "+command.location)
                 elif location_found == False and object_found == True:
                     print("I did not understand where you want me to quantify the "+command.object[0])
                 elif location_found == True and object_found == False:
