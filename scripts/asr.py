@@ -378,7 +378,7 @@ def treat_message(message):
             print("I did not understand what you want me to identify")
 
     elif len(words) > 1:
-        print("I did not understand what you said")
+        print("I did not understand what you mean by saying "+message)
 
 
 
