@@ -52,6 +52,8 @@ object_action = ["lying", "standing", "dining", "wearing", "waiting", "sitting",
 object_adj = ["white", "blue", "red", \
                 "biggest", "smallest", "bigger", "left", "right", "arm", "leg"]
 
+actions = ["locate", "identify", "quantify", "identify_category", "identify_same_category", "identify_color"]
+
 ####arena basic######
 ## Where is the <object> located - Where is the microwave located
 # -> Action::locate Object::microwave Location::- Object_action::- Object_adj::-
