@@ -160,7 +160,7 @@ def treat_message(message):
         else:
             print("You want to know where the "+command.object[0]+" is")
         
-    elif "many" in words:
+    elif "how" in words or "many" in words:
         command.action = "quantify" 
         # Tell me how many <object> are <object_action> <objecy_adj> - Tell me how many people are wearing white
         # -> Action::quantify Object::people Location::- Object_action::wearing Object_adj::white    
