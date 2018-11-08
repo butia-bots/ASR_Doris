@@ -130,7 +130,7 @@ class PorcupineDemo(Thread):
                 input_device_index=self._input_device_index)
 
             hello_pub = rospy.Publisher('doris/asr', Command_basic, queue_size=10)
-            wakeword_pub = rospy.Publisher('doris/act/hotword', Empty, queue_size=10)
+            wakeword_pub = rospy.Publisher('doris/asr/hotword', Empty, queue_size=10)
             rospy.init_node('Speech_Recognition', anonymous=False)
             rate = rospy.Rate(1)            
 
@@ -144,7 +144,9 @@ class PorcupineDemo(Thread):
                 result = porcupine.process(pcm)
                 if num_keywords == 1 and result:
                     print('[%s] detected keyword' % str(datetime.now()))
-                    empty_message = Empty()
+                    os.system("play /home/dimitri/hellodoris.mp3")
+
+		    empty_message = Empty()
                     wakeword_pub.publish(empty_message)
                     
                     raw_message = self.stt()
