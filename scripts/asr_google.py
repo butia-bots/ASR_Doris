@@ -140,11 +140,11 @@ class PorcupineDemo(Thread):
 
                 if self._output_path is not None:
                     self._recorded_frames.append(pcm)
-
+		print("asdasdf")
                 result = porcupine.process(pcm)
                 if num_keywords == 1 and result:
                     print('[%s] detected keyword' % str(datetime.now()))
-                    os.system("play /home/dimitri/hellodoris.mp3")
+                    #os.system("play /home/dimitri/hellodoris.mp3")
 
 		    empty_message = Empty()
                     wakeword_pub.publish(empty_message)
@@ -153,7 +153,7 @@ class PorcupineDemo(Thread):
                     
                     # for raw_message in speech:
                     #     break
-
+	
                     print("Raw message: " + str(raw_message))
                     message = treat_message(str(raw_message))                        
                     hello_pub.publish(message)

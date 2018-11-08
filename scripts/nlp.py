@@ -24,14 +24,14 @@ objects = ["shampoo", "soap", "cloth", "sponge", "toothpaste",
             "big dish", "small dish", "bowl", "glass", "mug", \
             "tray", "box", "bag", \
             "bed", "night table", "wardrobe", "dresser", "armchair", "drawer", "desk", \
-            "sideboard", "cutlery drawer", "dining table", "chair", "baby chair", \
+            "sideboard", "cutlery drawer", "dining", "table", "chair", "baby chair", \
             "bookshelf", "sofa", "coffee table", "center table", "bar", "fireplace", "tv couch", \
             "microwave", "cupboard", "counter", "sink", "stove", "fridge", "freezer", "washing machine", "dishwasher", \
             "cabinet", \
             "bidet", "shower", "bathtub", "toilet", "towel rail", "bathroom cabinet", "washbasin", \
             "object", "objects" \
             "females", "female", "male", "males", "woman", "man", "women", "men", "children", "people", "elders", \
-            "sheets", "objects",
+            "sheets", "coke", "sofa", "bed", "television", "bottle", "can", "yogurt", "tea", "juice", "cookie", "schweppes", "soap", "cereal", \
             "chair", "chairs", "doors", "drawer", "soda"
             ]
 
@@ -376,8 +376,16 @@ def treat_message(message):
         else:
             voice("I did not understand what you want me to identify")
 
+    elif "what" in words and "today" in words:
+	command.action = "identify"
+	command.object = "day"
+	voice("Today is the november eighth, two thousand and eighteen")
+
+    elif "finished" in words or "finish" in words:
+	command.action = "finish"
+
     elif len(words) > 1:
-        voice("I did not understand what you mean by saying "+message[2:])
+        voice("I did not understand what you said")
 
     print(command.action, command.object, command.location, command.object_action, command.object_adj) 
 
